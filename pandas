@@ -1,1 +1,23 @@
 
+今天看《利用python进行数据分析》看到了pandas入门那一章，然而当导入pandas.io.data时报了"The pandas.io.data module is moved to a separate package "这样的错误。查了好几篇关于这个问题的文档，终于把问题解决了。在这里总结一下解决问题的过程：
+
+1.报这样的错误是因为已经不支持pandas.io.data 这个模块了。
+
+2.要想解决这个问题只需要安装pandas-datareader模块替换pandas.io.data 就好。
+
+3.在cmd中直接输入命令“python -m pip install -U pandas-datareader”报Windows Error 5。查过之后才知道是python那个对应的文件夹没有修改和完全控制的权限。修改权限的过程如下：
+(5)我们此时再看看自己pip，是不是能够安装模块了。
+
+4.安装成功后，导入该模块，我的电脑报“No module named Requests_file”，这时，直接安装就可以。
+
+5.安装好“Requests_file”模块后，再导入“pandas_datareader”模块就可以导入了。
+
+6.导入模块后，运行web.get_data_yahoo函数，会报
+
+ImportError: The pandas.io.data module is moved to a separate package (pandas-datareader). After installing the pandas-datareader package (https://github.com/pydata/pandas-datareader), you can change the import ``from pandas.io import data, wb`` to ``from pandas_datareader import data, wb``.  
+这样的错误，这是因为pandas_datareader的版本过高的问题，这时可以采用两种办法来解决，一种是将pandas_datareader的版本回退到0.50版，第二种办法就是安装fix_yahoo_finace，这是一个补丁。这时，只需在你的脚本中加入：
+
+import fix_yahoo_finance as fy
+from pandas_datareader import data as web
+fy.web_override()
+
